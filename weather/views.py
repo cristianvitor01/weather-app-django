@@ -1,6 +1,7 @@
 import requests
 from django.shortcuts import render
 from .models import City
+from .forms import CityForm
 
 
 def index(request):
@@ -10,10 +11,15 @@ def index(request):
 
     cities = City.objects.all()  # return all the cities in the database
 
+    if request.method == 'POST':
+        form = CityForm(request.POST)
+        form.save()
+
+    form = CityForm()
+
     weather_data = []
 
     for city in cities:
-
         city_weather = requests.get(
             url.format(city)).json()  # request the API data and convert JSON to Python data types
 
@@ -27,6 +33,6 @@ def index(request):
 
         weather_data.append(weather)  # add the data for the current city into our list
 
-    context = {'weather_data': weather_data}
+    context = {'weather_data': weather_data, 'form': form}
 
     return render(request, 'weather/index.html', context)
