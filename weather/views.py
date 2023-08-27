@@ -13,4 +13,14 @@ def index(request):
 
     print(city_weather)  # temp
 
-    return render(request, 'weather/index.html')
+    # dict return main data to be passed with context in template.
+    weather = {
+        'city': city,
+        'temperature': city_weather['main']['temp'],
+        'description': city_weather['weather'][0]['description'],
+        'icon': city_weather['weather'][0]['icon']
+    }
+
+    context = {'weather': weather}
+
+    return render(request, 'weather/index.html', context)
