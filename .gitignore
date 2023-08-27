@@ -27,7 +27,7 @@ share/python-wheels/
 MANIFEST
 
 # API Secret
-views.py
+weather/views.py
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
