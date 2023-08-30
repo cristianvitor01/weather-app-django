@@ -3,6 +3,9 @@ from django.shortcuts import render
 from .models import City
 from .forms import CityForm
 
+def fahrenheit_to_celsius(fahrenheit):
+    return (fahrenheit - 32) * 5 / 9
+
 
 def index(request):
     """Return the index.html template"""
@@ -23,10 +26,14 @@ def index(request):
         city_weather = requests.get(
             url.format(city)).json()  # request the API data and convert JSON to Python data types
 
+        temperature_fahrenheit = city_weather['main']['temp']
+        temperature_celsius = fahrenheit_to_celsius(temperature_fahrenheit)
+        temperature_fahrenheit_formatado = "{:.1f}".format(temperature_celsius)
+
         # dict return main data to be passed with context in template.
         weather = {
             'city': city,
-            'temperature': city_weather['main']['temp'],
+            'temperature': temperature_fahrenheit_formatado,
             'description': city_weather['weather'][0]['description'],
             'icon': city_weather['weather'][0]['icon']
         }
